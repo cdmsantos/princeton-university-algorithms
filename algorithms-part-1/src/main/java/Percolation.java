@@ -22,7 +22,14 @@ public class Percolation {
 			col--;
 			site[row][col] = true;
 
-			unionNeighbors(row, col);
+			int transformed = transform(row, col);
+			
+			unionNeighbors(transformed, row-1, col);
+			unionNeighbors(transformed, row+1, col);
+
+			unionNeighbors(transformed, row, col-1);
+			unionNeighbors(transformed, row, col+1);
+
 			openSites++;
 		}
 	}
@@ -75,32 +82,9 @@ public class Percolation {
 		return false;
 	}
 
-	private void unionNeighbors(int row, int col) {
-		int top = row - 1, down = row + 1;
-		int left = col - 1, right = col + 1;
-
-		if (canJoin(top, top, col)) { //top
-			quickUnion.union(transform(row, col), transform(top, col));
-		}
-
-		if (canJoin(down, down, col)) { // down
-			quickUnion.union(transform(row, col), transform(down, col));
-		}
-
-		if (canJoin(left, row, left)) { // left
-			quickUnion.union(transform(row, col), transform(row, left));
-		}
-
-		if (canJoin(right, row, right)) { // right
-			quickUnion.union(transform(row, col), transform(row, right));
-		}
-	}
-
-	private boolean canJoin(int neighbor, int row, int col) {
-		if (neighbor >= 0 && neighbor < site.length && site[row][col] == true) {
-			return true;
-		} else {
-			return false;
+	private void unionNeighbors(int transformed, int row, int col) {
+		if(canJoin(row) && canJoin(col) && site[row][col]) {
+			quickUnion.union(transformed, transform(row, col));
 		}
 	}
 
@@ -108,6 +92,15 @@ public class Percolation {
 		checkRange(row, col);
 		return col + (row * site.length);
 	}
+	
+	private boolean canJoin(int element) {
+		if (element >= 0 && element < site.length) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 
 	private void checkRange(int row, int col) {
 		if (row < 0 || row >= site.length || col < 0 || col >= site.length) {
@@ -116,8 +109,8 @@ public class Percolation {
 	}
 
 //	private void printSites() {
-//		for (int i = 0; i < dimension; i++) {
-//			for (int j = 0; j < dimension; j++) {
+//		for (int i = 0; i < site.length; i++) {
+//			for (int j = 0; j < site.length; j++) {
 //				System.out.print(site[i][j] + " ");
 //			}
 //			System.out.println();
@@ -126,19 +119,19 @@ public class Percolation {
 //
 //	// test client (optional)
 //	public static void main(String[] args) {
-//		Percolation percolation = new Percolation(1);
+//		Percolation percolation = new Percolation(5);
 //
 ////		percolation.open(5,11);
 ////		System.out.println(percolation.isFull(1, 1));
-////		percolation.open(3, 1);
-////		percolation.open(3, 4);
-////		percolation.open(2, 3);
-////		percolation.open(2, 4);
-////		percolation.open(1, 3);
-////		percolation.open(4, 4);
-////		percolation.open(4, 5);
-////		percolation.open(5, 4);
-////		percolation.printSites();
+//		percolation.open(3, 1);
+//		percolation.open(3, 4);
+//		percolation.open(2, 3);
+//		percolation.open(2, 4);
+//		percolation.open(1, 3);
+//		percolation.open(4, 4);
+//		percolation.open(4, 5);
+//		percolation.open(5, 4);
+//		percolation.printSites();
 //		System.out.println(percolation.percolates());
 //	}
 }
