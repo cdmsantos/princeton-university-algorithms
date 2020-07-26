@@ -4,6 +4,7 @@ public class Percolation {
 	private int openSites;
 	private boolean[][] site;
 	final private WeightedQuickUnionUF quickUnion;
+	final private int VIRTUAL_BOTTOM;
 
 	// creates n-by-n grid, with all sites initially blocked
 	public Percolation(int n) {
@@ -11,8 +12,9 @@ public class Percolation {
 			throw new IllegalArgumentException();
 		}
 		openSites = 0;
-		quickUnion = new WeightedQuickUnionUF(n * n);
+		quickUnion = new WeightedQuickUnionUF(n * n + 2);
 		site = new boolean[n][n];
+		VIRTUAL_BOTTOM = n * n + 1;
 	}
 
 	// opens the site (row, col) if it is not open already
@@ -23,14 +25,20 @@ public class Percolation {
 			site[row][col] = true;
 
 			int transformed = transform(row, col);
-			
-			unionNeighbors(transformed, row-1, col);
-			unionNeighbors(transformed, row+1, col);
 
-			unionNeighbors(transformed, row, col-1);
-			unionNeighbors(transformed, row, col+1);
+			unionNeighbors(transformed, row - 1, col);
+			unionNeighbors(transformed, row + 1, col);
+
+			unionNeighbors(transformed, row, col - 1);
+			unionNeighbors(transformed, row, col + 1);
 
 			openSites++;
+
+			if (row == 0) {
+				quickUnion.union(transformed, 0);
+			} else if (row == site.length - 1) {
+				quickUnion.union(transformed, VIRTUAL_BOTTOM);
+			}
 		}
 	}
 
@@ -49,14 +57,7 @@ public class Percolation {
 		col--;
 		checkRange(row, col);
 
-		if(site[row][col] == true) {
-			for (int i = 0; i < site.length; i++) {
-				if (site[0][i] == true && (quickUnion.find(transform(row, col)) == quickUnion.find(transform(0, i)))) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return quickUnion.find(transform(row, col)) == quickUnion.find(0);
 	}
 
 	// returns the number of open sites
@@ -66,33 +67,24 @@ public class Percolation {
 
 	// does the system percolate?
 	public boolean percolates() {
-		if(site.length == 1) {
-			return isOpen(1,1);
-		} else {			
-			for (int i = 0; i < site.length; i++) {
-				for (int j = 0; j < site.length; j++) {
-					if (site[site.length - 1][i] == true 
-							&& site[0][j] == true
-							&& (quickUnion.find(transform(site.length - 1, i)) == quickUnion.find(transform(0, j)))) {
-						return true;
-					}
-				}
-			}
+		if (site.length == 1) {
+			return isOpen(1, 1);
+		} else {
+			return quickUnion.find(VIRTUAL_BOTTOM) == quickUnion.find(0);
 		}
-		return false;
 	}
 
 	private void unionNeighbors(int transformed, int row, int col) {
-		if(canJoin(row) && canJoin(col) && site[row][col]) {
+		if (canJoin(row) && canJoin(col) && site[row][col]) {
 			quickUnion.union(transformed, transform(row, col));
 		}
 	}
 
 	private int transform(int row, int col) {
 		checkRange(row, col);
-		return col + (row * site.length);
+		return 1 + col + (row * site.length);
 	}
-	
+
 	private boolean canJoin(int element) {
 		if (element >= 0 && element < site.length) {
 			return true;
@@ -100,7 +92,6 @@ public class Percolation {
 			return false;
 		}
 	}
-
 
 	private void checkRange(int row, int col) {
 		if (row < 0 || row >= site.length || col < 0 || col >= site.length) {
