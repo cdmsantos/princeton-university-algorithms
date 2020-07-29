@@ -39,7 +39,27 @@ public class InterviewQuestion_StackWithMax implements Iterable<Integer> {
 	public Integer pop() {
 		Integer item = first.item;
 		first = first.next;
+
+		if (item == maxValue) {
+			searchNewMax();
+		}
 		return item;
+	}
+
+	void searchNewMax() {
+		if (!isEmpty()) {
+			Node<Integer> temp = first;
+			Integer maxTemp = temp.item;
+			while (temp.next != null) {
+				if (temp.item > maxTemp) {
+					maxTemp = temp.item;
+				}
+				temp = temp.next;
+			}
+			maxValue = maxTemp;
+		} else {
+			maxValue = null;
+		}
 	}
 
 	@Override
@@ -69,14 +89,17 @@ public class InterviewQuestion_StackWithMax implements Iterable<Integer> {
 		InterviewQuestion_StackWithMax stack = new InterviewQuestion_StackWithMax();
 		stack.push(4);
 		System.out.println(stack.getMaximum());
-		stack.push(19);
+		stack.push(14);
 		System.out.println(stack.getMaximum());
 		stack.push(7);
 		System.out.println(stack.getMaximum());
-		stack.push(14);
+		stack.push(19);
 		System.out.println(stack.getMaximum());
 		stack.push(20);
 		System.out.println(stack.getMaximum());
-
+		stack.pop();
+		System.out.println("new max = " + stack.getMaximum());
+		stack.pop();
+		System.out.println("new max = " + stack.getMaximum());
 	}
 }
