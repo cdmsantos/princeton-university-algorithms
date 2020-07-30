@@ -1,9 +1,9 @@
 package com.crystalsantos.sorts.elementary;
 
-public class SelectionSort extends Sort{
+public class SelectionSort<Item> extends Sort<Item>{
 	
 	@Override
-	void sort(Comparable<Comparable<?>>[] a) {
+	void sort(Comparable<Item>[] a) {
 		int length = a.length;
 		for(int i = 0; i < length; i++) {
 			int min = i;

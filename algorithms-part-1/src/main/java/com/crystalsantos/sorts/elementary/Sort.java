@@ -1,15 +1,16 @@
 package com.crystalsantos.sorts.elementary;
 
-public abstract class Sort {
-	void exchange(Comparable<Comparable<?>>[] a, int i, int j) {
-		Comparable<Comparable<?>> swap = a[i];
+public abstract class Sort<Item> {
+	void exchange(Comparable<Item>[] a, int i, int j) {
+		Comparable<Item> temp = a[i];
 		a[i] = a[j];
-		a[j] = swap;
+		a[j] = temp;
 	}
 	
-	boolean less(Comparable<Comparable<?>> v, Comparable<Comparable<?>> w) {
-		return v.compareTo(w) < 0;
+	@SuppressWarnings("unchecked")
+	boolean less(Comparable<Item> v, Comparable<Item> w) {
+		return v.compareTo((Item) w) < 0;
 	}
 	
-	abstract void sort(Comparable<Comparable<?>>[] a);
+	abstract void sort(Comparable<Item>[] a);
 }

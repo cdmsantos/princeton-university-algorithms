@@ -1,9 +1,9 @@
 package com.crystalsantos.sorts.elementary;
 
-public class ShellSort extends Sort {
+public class ShellSort<Item> extends Sort<Item> {
 
 	@Override
-	void sort(Comparable<Comparable<?>>[] a) {
+	void sort(Comparable<Item>[] a) {
 		int length = a.length;
 		int h = 1;
 		while (h >= 1) {
@@ -15,5 +15,4 @@ public class ShellSort extends Sort {
 			h = h / 3;
 		}
 	}
-
 }
