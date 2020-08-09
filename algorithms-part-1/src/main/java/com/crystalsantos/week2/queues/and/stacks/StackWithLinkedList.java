@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class StackWithLinkedList<Item> extends Stack<Item> {
 	Node<Item> first;
 
-	StackWithLinkedList() {
+	public StackWithLinkedList() {
 		first = null;
 	}
 	

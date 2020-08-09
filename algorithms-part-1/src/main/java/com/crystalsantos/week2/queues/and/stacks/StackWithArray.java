@@ -16,6 +16,10 @@ public class StackWithArray<Item> extends Stack<Item> {
 	public boolean isEmpty() {
 		return nextIndex == 0;
 	}
+	
+	public int size() {
+		return nextIndex;
+	}
 
 	@Override
 	public void push(Item item) {
@@ -42,7 +46,7 @@ public class StackWithArray<Item> extends Stack<Item> {
 			
 			@Override
 			public boolean hasNext() {
-				return current > 0;
+				return current > 1;
 			}
 
 			@Override
