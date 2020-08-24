@@ -1,6 +1,6 @@
 package com.crystalsantos.week4.assignment;
-import java.util.NoSuchElementException;
 
+import java.util.NoSuchElementException;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Stack;
@@ -39,6 +39,7 @@ public class Solver {
 		}
 		priorityQueue = new MinPQ<Node>();
 		priorityQueue.insert(new Node(initial));
+
 		play();
 	}
 
